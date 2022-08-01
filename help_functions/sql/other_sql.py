@@ -1,6 +1,7 @@
 from loader import db
 from message_texts import texts as tx
 
+
 # Выдача правильного перевода
 def give_translate_r(en_text):
     find = db.fetchall(f"""SELECT translate 
@@ -21,10 +22,15 @@ def check_word_e_r(en_text):
     return 0
 
 
-# Удаление слова, которое человек знает
 def delete_word(user_id, word):
+    delete_word_table(user_id, word, 'Dictionary')
+    delete_word_table(user_id, word, 'Weights')
+
+
+# Удаление слова, которое человек знает
+def delete_word_table(user_id, word, table):
     db.query(f"""DELETE 
-                FROM Dictionary 
+                FROM {table} 
                 WHERE user_id = {user_id}
                 AND word = '{word}'""")
 
@@ -45,8 +51,26 @@ def fill_weight(user_id):
         weight = 50
         info = (user_id, word, weight)
         db.query(f"""INSERT INTO 
-                        Weights (u_id, word, y) 
+                        Weights (user_id, word, y) 
                         VALUES {info}""")
 
 
+#Достаёт  словарь пользователя
+def show_user_dict(user_id):
+    d = db.fetchall(f"SELECT word, translate FROM Dictionary WHERE user_id = {user_id}")
+    dict_text = ""
+    for stack in d:
+        e, r = stack
+        line = f"{e}: {r}\n"
+        dict_text += line
+    return dict_text
+
+def show_info():
+    res = db.fetchall("""SELECT * FROM Data""")
+    for i in res:
+        print(i)
+
+    res2 = db.fetchall("""SELECT * FROM Weights""")
+    for i in res2:
+        print(i)
 

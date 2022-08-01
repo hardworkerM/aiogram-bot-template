@@ -1,14 +1,18 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
-def main_menu():
+def main_menu(flag=0):
     markup = InlineKeyboardMarkup()
+    m2 = InlineKeyboardMarkup()
 
     btn1 = InlineKeyboardButton("Учить", callback_data='learn')
     btn2 = InlineKeyboardButton("Добавить", callback_data='add')
-    btn3 = InlineKeyboardButton("", callback_data='')
+    btn3 = InlineKeyboardButton("слова", callback_data='МОИ')
 
-    markup.add(btn1, btn2, back_btn())
+    markup.add(btn1, btn2, btn3)
+    m2.add(btn1, btn2)
+    if flag == 1:
+        return m2
     return markup
 
 

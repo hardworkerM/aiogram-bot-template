@@ -11,7 +11,7 @@ def take_weights(user_id):
     """
     weigts = db.fetchall(f"""SELECT word, y
                             FROM Weights
-                            WHERE u_id = {user_id}
+                            WHERE user_id = {user_id}
                          """)
     words = {}
     for info in weigts:
@@ -28,9 +28,9 @@ def change_weights(user_id, word, y):
     word - word weight change to
     user_id - id of user in DB
     """
-    db.query(f"""UPDATE Weight 
+    db.query(f"""UPDATE Weights 
                 SET y = {y}
-                WHERE u_id = {user_id} 
+                WHERE user_id = {user_id} 
                 AND word = '{word}'
             """)
 
@@ -49,7 +49,7 @@ def fill_data(user_id, word, answer, ans_time, y_changes):
     """
     info = db.fetchall(f"""SELECT tries, correct, combo, percents
                         FROM Data
-                        WHERE u_id = {user_id}
+                        WHERE user_id = {user_id}
                         AND word = '{word}'
                         ORDER BY word DESC
                         LIMIT 1
@@ -63,13 +63,15 @@ def fill_data(user_id, word, answer, ans_time, y_changes):
         combo += 1
     else:
         combo = 0
+    correct += answer
     percents += y_changes
     tries += 1
     info_in = (user_id, word, tries, correct, combo, ans_time, percents)
     db.query(f"""INSERT INTO 
-                Data (u_id, word, tries, correct, combo, ans_time, percents)
+                Data (user_id, word, tries, correct, combo, ans_time, percents)
                 VALUES {info_in} 
             """)
+    change_weights(user_id, word, percents)
 
 
 

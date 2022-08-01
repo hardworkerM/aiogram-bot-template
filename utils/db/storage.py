@@ -11,15 +11,16 @@ class DatabaseManager(object):
 
     def create_tables(self):
         self.query('CREATE TABLE IF NOT EXISTS Users (id int, u_name text)')
-        self.query("""CREATE TABLE IF NOT EXISTS Data (u_id int, word text,
+        self.query("""CREATE TABLE IF NOT EXISTS Data (user_id int, word text,
                                                         tries int,
                                                         correct int,
                                                         combo int,
                                                         ans_time text,
                                                         percents int
                                                         )""")
-        self.query('CREATE TABLE IF NOT EXISTS Weights (u_id int, word text, y int)')
+        self.query('CREATE TABLE IF NOT EXISTS Weights (user_id int, word text, y int)')
         self.query('CREATE TABLE IF NOT EXISTS Dictionary (user_id int, word text, translate text)')
+        self.query('CREATE TABLE IF NOT EXISTS Sad (user_id int, about text)')
 
 
     def query(self, arg, values=None):

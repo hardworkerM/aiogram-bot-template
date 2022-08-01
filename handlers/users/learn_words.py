@@ -40,9 +40,7 @@ def take_word(user_id):
     word_dict = w_sql.take_weights(user_id)
     words = list(word_dict.keys())
     weight = list(word_dict.values())
-    print(weight, words)
     word = (random.choices(words, weights=weight))
-    print(word)
     return word[0]
 
 
@@ -83,7 +81,7 @@ async def weight_hire(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
     ans = data['ans']
     time = count_time(data['time'], data['end'])
-    w_sql.fill_data(user_id, word, ans, time, 1)
+    w_sql.fill_data(user_id, word, ans, time, 10)
     await call.answer("Спасибо ❤")
     await give_word(call, state)
 
@@ -95,7 +93,7 @@ async def weight_hire(call: CallbackQuery, state: FSMContext):
     user_id = call.from_user.id
     ans = data['ans']
     time = count_time(data['time'], data['end'])
-    w_sql.fill_data(user_id, word, ans, time, -1)
+    w_sql.fill_data(user_id, word, ans, time, -10)
     await call.answer("Спасибо ❤")
     await give_word(call, state)
 
